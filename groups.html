@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <title>Groups</title>
+
+    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="javascripts/all.js" type="text/javascript"></script>
+
+  </head>
+
+  <body class="groups">
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+      <div id="toc">
+      </div>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <p>Groups is the easiest way to collaborate with other researchers in Mendeley. </p>
+
+<p>There are three types of groups in Mendeley with different sharing and privacy levels:</p>
+
+<h4 id="anatomy-of-a-group">Anatomy of a group</h4>
+
+<p>A group object has the following fields:</p>
+
+<ul>
+<li><strong>id(string)</strong>: Identifier (UUID) of the group. This identifier is set by the server on create and cannot be modified.</li>
+<li><strong>link(string)</strong>: URL of the group page in Mendeley.</li>
+<li><strong>owning_profile_id(string)</strong>: Profile identifier of the owner of the group.</li>
+<li><strong>access_level(string)</strong>: Whether the group is public, private or invite_only. More on access levels below. </li>
+<li><strong>created(string)</strong>: Date the group was created. This date is set by the server after a successful create reques and is represented in ISO 8601 format.</li>
+<li><strong>name(string)</strong>: The name of the group.</li>
+<li><strong>description(string)</strong>: Small description of what the group is about. </li>
+<li><strong>photo(object)</strong>: The photo object contains the URL to the photo/logo of the group. There are three sizes available: original, standard and square. </li>
+<li><strong>webpage(string)</strong>: Website of the group outside Mendeley.</li>
+<li><strong>disciplines(array)</strong>: List of disciplines the group is part of.</li>
+<li><strong>tags(array)</strong>: List of tags assigned to the group.</li>
+<li><strong>role(string)</strong>: Role of the authenticated user in the group. More on group roles below. </li>
+</ul>
+
+<h4 id="group-roles">Group roles</h4>
+
+<ul>
+<li><strong>Owner</strong>: the creator of the group. </li>
+<li><strong>Admin</strong>: administrator of the group. Only owners and admins can make other members administrators. </li>
+<li><strong>User</strong>: normal users of the group. Users can add new references, add files and start discussions in the newsfeed of the group.<br></li>
+<li><strong>Follower</strong>: followers of the group. Only public groups can have followers. Followers cannot interact with other members, i.e. post in newsfeed and participate in discussions, nor add references to the group. This is a read-only access membership.</li>
+</ul>
+
+<h4 id="group-access-levels">Group access levels</h4>
+
+<ul>
+<li><strong>Private</strong>: These groups are great for sharing references and full-text articles. Only members of the group are able to access the group and download the shared files.</li>
+<li><strong>Invite-only (public)</strong>: These groups are publicly accessible through Mendeley search but it requires an invitation to join them. It is only possible to share references. Any files added to the group won&rsquo;t be available for download to any members. Good for sharing references or reading lists.</li>
+<li><strong>Open (public)</strong>: These groups are publicly accessible through the Mendeley search and any Mendeley user can join them. It is only possible to share references. Good for crowd sourcing reading lists.</li>
+</ul>
+
+<h4 id="getting-started-with-the-groups-api">Getting started with the Groups API</h4>
+
+<ol>
+<li><p><strong>Retrieving groups</strong></p>
+
+<p>You can retrieve all groups that the user belong to by performing the following request:</p>
+
+<p>GET /groups </p>
+
+<p>A successful response will return a 200 OK code status and a collection of group objects.</p>
+
+<p>You can also retrieve information for a single group by passing its id in the request:</p>
+
+<p>GET /groups/247f3e38-8b92-3692-bba3-d922b7805126</p>
+
+<p>Response example: </p>
+
+<p>{
+      &ldquo;name&rdquo;: &ldquo;Test group&rdquo;,
+      &ldquo;description&rdquo;: &ldquo;This is a group for testing the Mendeley API&rdquo;,
+      &ldquo;photo&rdquo;: {
+        &ldquo;standard&rdquo;: &ldquo;http://s3.amazonaws.com/mendeley-photos/awaiting.png&rdquo;,
+        &ldquo;square&rdquo;: &ldquo;http://s3.amazonaws.com/mendeley-photos/disciplines/small/computer-and-information-science.png&rdquo;
+      },
+      &ldquo;webpage&rdquo;: &ldquo;&rdquo;,
+      &ldquo;disciplines&rdquo;: [
+        6
+      ],
+      &ldquo;tags&rdquo;: [],
+      &ldquo;id&rdquo;: &ldquo;247f3e38-8b92-3692-bba3-d922b7805126&rdquo;,
+      &ldquo;created&rdquo;: &ldquo;2014-06-02T12:08:41.000Z&rdquo;,
+      &ldquo;owning_profile_id&rdquo;: &ldquo;e2cc65ad-5ef2-3838-b934-737fdb3b196d&rdquo;,
+      &ldquo;link&rdquo;: &ldquo;http://www.mendeley.com/groups/4542291/test-group/&rdquo;,
+      &ldquo;access_level&rdquo;: &ldquo;private&rdquo;
+    }   </p></li>
+<li><p><strong>Retrieving members information</strong></p>
+
+<p>You can see the members in a group by perfoming the following request: </p>
+
+<p>GET /groups/247f3e38-8b92-3692-bba3-d922b7805126/members</p>
+
+<p>A successful request will return a 200 OK status code and a collection of objects with the fields:</p>
+
+<ul>
+<li><strong>profile_id(string)</strong>: UUID of the member&rsquo;s profile. </li>
+<li><strong>role(string)</strong>: What type of role the member has in the group.</li>
+<li><strong>joined(string)</strong>: Date that the user joined the group. This date is set by the server and is represented in ISO 8601 format. </li>
+</ul></li>
+</ol>
+
+      </div>
+      <div class="dark-box">
+      </div>
+    </div>
+  </body>
+</html>

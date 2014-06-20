@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <title>Folders</title>
+
+    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="javascripts/all.js" type="text/javascript"></script>
+
+  </head>
+
+  <body class="folders">
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+      <div id="toc">
+      </div>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <p>Folders are an easy way to organise your documents.</p>
+
+<p>You can have folders in your library and also in your groups. It is also possible to create subfolders. </p>
+
+<p>Getting started with the folders API</p>
+
+<ol>
+<li><p><strong>Retrieving folders</strong></p>
+
+<p>To retrieve folders we&rsquo;ll perform a GET request to the /folders endpoint:</p>
+
+<p>GET /folders</p>
+
+<p>If no parameters are passed in the request, the server will return a collection of all the visible folders for the authenticated user, including both library and group folders.</p>
+
+<p>This request also accepts the following parameters: </p></li>
+</ol>
+
+<p>- <strong>group_id(string)</strong>: Returns all folders in a particular group.
+    - <strong>profile_id(string)</strong>: Returns all folders created by the user with this profile id.</p>
+
+<ol>
+<li><p><strong>Creating a folder</strong></p>
+
+<p>To create a folder we&rsquo;ll do a POST request to the /folders endpoint. The body of the request should be a JSON object with the following fields:</p></li>
+</ol>
+
+<p>- <strong>name(string)</strong>: The name of the folder. This is a required field.
+    - <strong>parent(string)</strong>: If what we are creating is a subfolder, then we need to pass the id of the parent folder here. This is an optional field.
+    - <strong>group_id(string)</strong>: If what we want to create is a group folder, we need to provide the id of the group. This is an optional field.</p>
+
+<p>A successful request will return a 201 CREATED object and the newly created folder will be returned in the body. </p>
+
+<p>Things to have in mind when creating folders:</p>
+
+<p>- Once you have created a folder you cannot change its nature, i.e if it is a group folder, it will always remain a group folder.
+    - When creating subfolders in a group folder, you need to pass the group id as well in the request. Otherwise you will get a 400 BAD REQUEST error.
+    - Cycle dependencies are not permitted, i.e if A is parent of B, B cannot be parent of A.</p>
+
+<ol>
+<li><p><strong>Updating a folder</strong></p>
+
+<p>We can only update a folder&rsquo;s name and parent attributes. We&rsquo;ll do this with the PATCH method.</p>
+
+<p>PATCH /folders/{id}</p>
+
+<p>Same restrictions as in creating folders apply here. A successful request will result in a 204 NO CONTENT.</p></li>
+<li><p><strong>Deleting a folder</strong></p>
+
+<p>To delete a folder, we can simply do:</p>
+
+<p>DELETE /folders/{id}</p>
+
+<p>Where {id} is the id of the folder to be deleted. A successful request will return a 204 NO CONTENT. 
+Please be aware that performing this request will permanently delete the folder and all subfolders in it. Documents will still be available from the library or the group if it was a group folder.</p></li>
+<li><p><strong>Retrieving documents in a folder</strong></p>
+
+<p>You can find out what documents are contained in a folder by doing:</p>
+
+<p>GET /folders/{id}/documents</p>
+
+<p>Where {id} is the identifier of the folder. </p>
+
+<p>This endpoint will return a list of ids of the documents in the folder. To retrieve the information about documents, please refer to the documents API.</p></li>
+<li><p><strong>Adding a document to a folder</strong></p>
+
+<p>You can easily add a document to your folder by doing the following request:</p>
+
+<p>POST /folders/{id}/documents</p>
+
+<p>With the body:</p>
+
+<p>{
+        &ldquo;document&rdquo;: &ldquo;{document_id}&rdquo;
+    }</p>
+
+<p>Where {document_id} is the UUID of the document that you want to add to the folder with UUID {id}.</p></li>
+<li><p><strong>Deleteing a document from a folder</strong></p>
+
+<p>To delete a document from a folder you just need to do a DELETE request to the /folders/{id}/documents/{document_id} endpoint. </p>
+
+<p>This will remove the relationship between the folder and the document, but you can still access the document in your library or group.
+To remove the document permanently or move it to the trash, please refer to the documents API.</p></li>
+</ol>
+
+      </div>
+      <div class="dark-box">
+      </div>
+    </div>
+  </body>
+</html>

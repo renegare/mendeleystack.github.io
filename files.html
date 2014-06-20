@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <title>Files</title>
+
+    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="javascripts/all.js" type="text/javascript"></script>
+
+  </head>
+
+  <body class="files">
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+      <div id="toc">
+      </div>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <p>Files are the actual file attachments that are associated with documents. A document can have many files associated with it. 
+Most often these files are .PDF files, which can be read in the Mendeley applications. Though others extensions are allowed: .doc, .txt, etc.</p>
+
+<h4 id="how-to-use-the-files-api">How to use the Files API</h4>
+
+<p>The Files API is very simple to use. There are however a few important things to understand:</p>
+
+<p>When files are uploaded to the system, we calculate their sha1. This is a unique identifier of the file. We do not support file versioning at the moment, since when the file content changes, so will its filehash, making it an entire new file in the system. This may change in the future.</p>
+
+<ol>
+<li><p><strong>Retrieving files information</strong></p>
+
+<p>You can retrieve a list of your files by simply doing a GET request to the /files endpoint. </p>
+
+<p>GET /files</p>
+
+<p>Responses will contain the following information:</p></li>
+</ol>
+
+<p>- <strong>id(string)</strong>: The unique identifier for the file (required for other operations).
+    - <strong>file_name(string)</strong>: The name of the file. This is currently a generated name from the metadata of the document that the file is attached to. However, we will support original file names from the upload soon.
+    - <strong>mime_type(string)</strong>: The mime type of the file. This is used to work out the extension of the file. More info on mime types <a href="http://en.wikipedia.org/wiki/Internet_media_type">here</a>.
+    - <strong>file_hash(string)</strong>: SHA1 hash of the file. This can be used to check the integrity of the file. 
+    - <strong>document_id(string)</strong>: The id of the document the file is attached to.</p>
+
+<p>There are a few parameters that we can pass in this request that might help narrow down the files you are after:</p>
+
+<p>- <strong>document_id</strong>: When this is provided, the response will contain only the files attached to that particular document.
+    - <strong>group_id</strong>: When this is provided, the response will contain only the files attached to documents that belong to that particular group. 
+    - <strong>added_since</strong>: Response will only contain those files uploaded since the &lsquo;added_since&rsquo; date. This date should be an ISO 8601 timestamp.
+    - <strong>deleted_since</strong>: Response will only contain those files deleted since this date. It should be an ISO 8601 timestamp.</p>
+
+<p><strong>NOTE</strong>: <em>document_id</em> and <em>group_id</em> are mutually exclusive. Providing both at the same time might end in no results being returned by the API.</p>
+
+<p><strong>Examples</strong></p>
+
+<p>Getting files added since the 1st of September 2009:</p>
+
+<p>GET /files?added_since=2009-09-01T16%3A39%3A41.000Z</p>
+
+<p>Get all the files associated with document bfde49d5-732c-326f-8c8e-c851286e00a0:</p>
+
+<p>GET /files?document_id=bfde49d5-732c-326f-8c8e-c851286e00a0</p>
+
+<ol>
+<li><p><strong>Downloading a file</strong></p>
+
+<p>To download a file, you only need to provide its id as returned on the previous call.</p>
+
+<p>GET /files/{id}</p>
+
+<p>On a successful request the server will respond with a 303 SEE OTHER response together with a Location header. The URL in this location header is signed for a limited period of time where the file can be downloaded. </p></li>
+<li><p><strong>Uploading a file</strong></p>
+
+<p>To upload a file through the API we require the use of headers to provide information needed to the server that cannot be passed in the body (since the binary information needs to be transmitted there).
+The following headers are required by the files API:</p></li>
+</ol>
+
+<p>- <strong>Content-Type</strong>: This header will tell the server the file&rsquo;s media type. For example, application/pdf.
+    - <strong>Content-Disposition</strong>: This header is used to extract the file&rsquo;s name. The value should be, for example: attachment; filename=&ldquo;example.pdf&rdquo;
+    - <strong>Link</strong>: We use this header to specify the document that the file should be attached to. For example: https://mix.mendeley.com/documents/cfb60e27-d3e4-397d-bb59-fc8388b98152</p>
+
+<p>Example request:</p>
+
+<p>POST /files
+            Link: https://mix.mendeley.com/documents/cfb60e27-d3e4-397d-bb59-fc8388b98152
+            Content-Type: &ldquo;application/pdf&rdquo;
+            Content-Disposition: attachment; filename=&ldquo;example.pdf&rdquo;</p>
+
+<p>A successful request will respond with a 201 CREATED code and a Location header where you can find the URL where you can download the file:</p>
+
+<p>201 CREATED
+        Location: https://mix.mendeley.com/files/7574ef29-e090-5c4c-1903-40018b6c3063</p>
+
+<ol>
+<li><p><strong>Deleting a file</strong></p>
+
+<p>To delete a file you must simply do:</p>
+
+<p>DELETE /files/{id}</p>
+
+<p>A successful request will respond with a 204 NO CONTENT code. </p>
+
+<p>Files are permanently deleted and cannot be recovered. If you wish to recover the file, you must upload it again. </p>
+
+<p><strong>IMPORTANT</strong>: When deleting a file from a group document, be aware that this will affect all members in the group and the file will disappear from their library as well.</p></li>
+</ol>
+
+      </div>
+      <div class="dark-box">
+      </div>
+    </div>
+  </body>
+</html>
