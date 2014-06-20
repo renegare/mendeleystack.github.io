@@ -1,5 +1,5 @@
 ---
-title: API Reference
+title: Mendeley API Reference
 
 language_tabs:
   - shell
@@ -7,8 +7,7 @@ language_tabs:
   - python
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href="http://dev.mendeley.com/">Sign Up for a Developer Key</a>
 
 includes:
   - errors
@@ -165,4 +164,3 @@ This endpoint retrieves a specific kitten.
 Parameter | Description
 --------- | -----------
 ID | The ID of the cat to retrieve
-
