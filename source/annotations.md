@@ -1,24 +1,41 @@
+---
+title: Annotations
+
+language_tabs:
+  - shell
+  - ruby
+  - python
+
+toc_footers:
+  - <a href="http://dev.mendeley.com/">Sign Up for a Developer Key</a>
+
+includes:
+  - errors
+
+search: true
+---
+
 # Annotations
 
 Annotations provide a way to highlight or add comments on a section of a file in order to be able to identify particular pieces of it or share points of view on it.
 
 ## Attributes of an Annotation
 
-Parameter | Type | Description 
+Parameter | Type | Description
 --------- | ------- | ----------- |
-id | string | identifier (UUID) 
+id | string | identifier (UUID)
 created | string |  date the annotation was created. This date is set by the server after a successful create request. This date is represented in ISO 8601 format.
-last_modified | string |  date the annotation was updated. This date is updated by the server after a successful update request. This date is represented in ISO 8601 format. 
-color | color |  RGB values 
+last_modified | string |  date the annotation was updated. This date is updated by the server after a successful update request. This date is represented in ISO 8601 format.
+color | color |  RGB values
 text | string |  text value of the annotation
 positions | array of HighlightBox's | wrapper object contains page and coordinates of the annotation bounding box (IMPROVE THIS)
-privacy_level | string | public (DESCRIBE THESE), group or private  | 
+privacy_level | string | public (DESCRIBE THESE), group or private  |
 document_id | string |  UUID of the document which the file is attached to.
 profile_id | string |  UUID of the user that created the annotation.
 filehash | string |  filehash of which the annotation belongs to.
 
 
-##  Retrieving annotations 
+##  Retrieving annotations
 By default will return a paginated collection of all private annotations in your library.
 
 > Returns JSON structured like this:
@@ -68,18 +85,18 @@ group_id | string | UUID of the group you would like to get the annotations from
 document_id | string | UUID of the document you would like to get the annotations from. This will only return the annotations associated with that document.
 
 ### Returns
-The annotation object or an empty collection if both ```group_id``` and ```document_id``` are set. These are mutually exclusive. 
+The annotation object or an empty collection if both ```group_id``` and ```document_id``` are set. These are mutually exclusive.
 
 
 
 ## Creating an annotation
-Creates a new annotation. 
+Creates a new annotation.
 
 > Create using JSON structure like this:
 
 ```json
 {
-    
+
     "color": {
       "r": 255,
       "g": 255,
@@ -111,12 +128,12 @@ Creates a new annotation.
 
 `POST https://mix.mendeley.com/annotations`
 
-Parameter | Type | Description 
+Parameter | Type | Description
 --------- | ------- | ----------- |
-color | color |  RGB values 
+color | color |  RGB values
 text | string |  text value of the annotation
 positions | array of HighlightBox's | wrapper object contains page and coordinates of the annotation bounding box (IMPROVE THIS)
-privacy_level | string | public (DESCRIBE THESE), group or private (default)  | 
+privacy_level | string | public (DESCRIBE THESE), group or private (default)  |
 filehash | string |  filehash of which the annotation belongs to.
 document_id | string |  UUID of the document which the file is attached to.
 
@@ -126,7 +143,7 @@ Returns the annotation object if it successed.
 
 
 ## Updating an annotation
-Updates a specific annotation. Any parameters not provided will be left unchanged. The fields that can be updated are: text, color, positions, privacy_level and filehash. The fields document_id, profile_id and created, are only allowed to be set on creation. 
+Updates a specific annotation. Any parameters not provided will be left unchanged. The fields that can be updated are: text, color, positions, privacy_level and filehash. The fields document_id, profile_id and created, are only allowed to be set on creation.
 
 > Update the text and positions of the annotation example
 
@@ -158,12 +175,12 @@ Updates a specific annotation. Any parameters not provided will be left unchange
 
 `PATCH https://mix.mendeley.com/annotations/{id}`
 
-Parameter | Type | Description 
+Parameter | Type | Description
 --------- | ------- | ----------- |
-color | color |  RGB values 
+color | color |  RGB values
 text | string |  text value of the annotation
 positions | array of HighlightBox's | wrapper object contains page and coordinates of the annotation bounding box (IMPROVE THIS)
-privacy_level | string | public (DESCRIBE THESE), group or private (default)  | 
+privacy_level | string | public (DESCRIBE THESE), group or private (default)  |
 filehash | string |  filehash of which the annotation belongs to.
 document_id | string |  UUID of the document which the file is attached to.
 
